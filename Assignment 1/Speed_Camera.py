@@ -2,61 +2,90 @@
 
 # -- MANUALLY ENTER THE DATA STREAM -- #
 
+hgSpeeds = []
+lgSpeeds = []
+cSpeeds = []
 
-h = int(input('Enter speed of Heavy Goods Vehicle: '))
-l = int (input ('Enter speed of Light Goods Vehicle: '))
-c = int (input ('Enter the speed of Car: '))
-c2 = int (input ('Enter the speed of Second Car: '))
+recordedSpeeds = []
 
-# -- -- -- -- -- -- -- -- -- -- -- -- #
+possibleCategories = ["H", "L", "C"]
+
+# Start Taking The Data Stream
+receiveStream = 1
+
+while receiveStream == 1:
+
+    current_input = str(input("Enter Vehicle's Category and Speed: "))
+
+    if current_input == "END":
+        receiveStream = 0
+    else:
+
+        vehicleCategory = current_input[:1]
+        if vehicleCategory not in possibleCategories:
+            print("Error: Vehicle Category Does Not Exist!")
+        else:
+            try:
+                vehicleSpeed = int(current_input[1:])
+                recordedSpeeds.append(vehicleCategory + str(vehicleSpeed))
+            except ValueError:
+                print("Error: Could not convert speed to integer")
 
 
-heavySpeeds = [h]
-lightSpeeds = [l]
-carSpeeds = [c, c2]
 
-for i in heavySpeeds:
-    print("Next Reading: H" + i.__str__())
+# Print Results
 
-for i in lightSpeeds:
-    print("Next Reading: L" + i.__str__())
+print("")
+print("")
+print("==================")
+print("====Readings====")
+print("")
+print("")
+for i in recordedSpeeds:
+    print("Next Reading: " + i.__str__())
 
-for i in carSpeeds:
-    print("Next Reading: C" + i.__str__())
 
-print ( "Next Reading: end\n")
 
 # Convert to KMH
 
 kmhMuliplier = 1.60934
 
+# Calculating Statisics
 
-# Calculate Values Between All Vehicles
+allSpeeds = []
 
-allVehicles = [h, l, c, c2]
+for i in recordedSpeeds:
+    allSpeeds.append(int(i[1:]))
 
-print ( "Number of Vehicles: " + len(allVehicles).__str__() + " MPH" + " (" + (len(allVehicles)*kmhMuliplier).__str__() + " KMH)")
-print ( "Highest Speed Seen: " + max(allVehicles).__str__() + " MPH" + " (" + (max(allVehicles)*kmhMuliplier).__str__() + " KMH)")
-print ( "Lowest Speed Seen: " + min(allVehicles).__str__() + " MPH" + " (" + (min(allVehicles)*kmhMuliplier).__str__() + " KMH)")
+print("")
+print("")
+print("================")
+print("===STATISTICS===")
+print("")
 
-avgMPH = sum(allVehicles)/len(allVehicles)
-avgKMH = avgMPH*kmhMuliplier
-print ( "Average Speed Seen: " + avgMPH.__str__() + " MPH" + " (" + avgKMH.__str__() + " KMH)" + "\n")
 
-# Calculating Speed Limit Violation
+print("Number of Vehicles: " + len(allSpeeds).__str__())
+print("Highest Speed Seen: " + max(allSpeeds).__str__() + " MPH" + " (" + (max(allSpeeds) * kmhMuliplier).__str__() + " KMH)")
+print("Lowest Speed Seen: " + min(allSpeeds).__str__() + " MPH" + " (" + (min(allSpeeds) * kmhMuliplier).__str__() + " KMH)")
+
+print("")
+
+avgMPH = sum(allSpeeds) / len(allSpeeds)
+avgKMH = avgMPH * kmhMuliplier
+print("Average Speed Seen: " + avgMPH.__str__() + " MPH" + " (" + avgKMH.__str__() + " KMH)" + "\n")
+
+print("")
+
+# Speed violations
 
 speedViolation = 0
 
-for i in allVehicles:
+for i in allSpeeds:
     if i > 50:
         speedViolation = speedViolation + 1
 
 # Calculate Percentage of Violations
 
-percentage = speedViolation / len(allVehicles) * 100
+percentage = speedViolation / len(allSpeeds) * 100
 
-print ( "Speed Limit Violations: " + speedViolation.__str__() + " (" + percentage.__str__() + "%)")
-
-
-
-
+print("Speed Limit Violations: " + speedViolation.__str__() + " (" + percentage.__str__() + "%)")
